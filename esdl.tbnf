@@ -4,18 +4,15 @@ extern var push_array: <A>(list<A>, A) -> list<A>
 type AttrItem(ident: str, args: list<AttrItem>)
 type Field(attribute: list<AttrItem>, name: str, ty: str, optional: bool, repeated: bool)
 type Ctor(attribute: list<AttrItem>, name: str, fields: list<Field>)
-type Sort(attribute: list<AttrItem>, name: str, ctors: list<Ctor>, export: bool)
+type Sort(attribute: list<AttrItem>, name: str, ctors: list<Ctor>)
 
 start : sorts { $1 }
 
 sorts : sorts sort { push_array($1, $2) }
       | sort { [$1] }
 
-sort : attr export <ID> ':' seplist('|', ctor) { Sort($1, lexeme($3), $5, $2) }
-     | attr export <ID> '(' seplist(',', field) ')' { Sort($1, lexeme($3), [Ctor([], lexeme($3), $5)], $2) }
-
-export : 'export' { true }
-       | { false }
+sort : attr <ID> ':' seplist('|', ctor) { Sort($1, lexeme($2), $4) }
+     | attr <ID> '(' seplist(',', field) ')' { Sort($1, lexeme($2), [Ctor($1, lexeme($2), $4)]) }
 
 ctor : attr <ID> { Ctor($1, lexeme($2), []) }
      | attr <ID> '(' seplist(',', field) ')' { Ctor($1, lexeme($2), $4) }
