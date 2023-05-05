@@ -1,9 +1,8 @@
 extern var lexeme: token -> str
 extern var push_array: <A>(list<A>, A) -> list<A>
 
-type Ty(name: str)
 type AttrItem(ident: str, args: list<AttrItem>)
-type Field(attribute: list<AttrItem>, name: str, ty: Ty, optional: bool, repeated: bool)
+type Field(attribute: list<AttrItem>, name: str, ty: str, optional: bool, repeated: bool)
 type Ctor(attribute: list<AttrItem>, name: str, fields: list<Field>)
 type Sort(attribute: list<AttrItem>, name: str, ctors: list<Ctor>, export: bool)
 
@@ -31,7 +30,7 @@ attr : '#[' seplist(',', attritem) ']' { $2 }
 attritem : <ID> { AttrItem(lexeme($1), []) }
          | <ID> '(' seplist(',', attritem) ')' { AttrItem(lexeme($1), $3) }
 
-ty : <ID> { Ty(lexeme($1)) }
+ty : <ID> { lexeme($1) }
 
 seplist(sep, elt) : elt { [$1] }
                   | seplist(sep, elt) sep elt { push_array($1, $3) }
