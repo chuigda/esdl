@@ -1,0 +1,10 @@
+__pycache__
+_tbnf
+.vscode
+
+esdl_construct.py
+esdl_lexer.py
+esdl_parser.py
+esdl.lark
+
+*.esdl
