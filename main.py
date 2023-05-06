@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 
 from esdl_parser import parser
+from codegen_rs import generate_sort
 
 
 arg_parser = argparse.ArgumentParser(
@@ -22,4 +23,5 @@ if __name__ == '__main__':
     args = arg_parser.parse_args()
     with open(args.input, 'r') as input_file:
         parsed_tree = parser.parse(input_file.read())
-        print(parsed_tree)
+        for sort in parsed_tree: # type: ignore
+            print(generate_sort(sort))
